@@ -1,0 +1,15 @@
+# Exclude virtual environment and bin dirs
+venv/
+
+
+# virtualenv
+/bin
+/build
+/include
+/man
+/local
+/lib
+
+
+# my ide
+*/.idea/*
