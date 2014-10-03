@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}</style>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ API_KEY }}"></script>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div id="map-canvas"></div>
+    </body>
+    <script type="text/javascript">
+
+
+        function load_map(latlng) {
+            var mapOptions = {
+                center: latlng,
+                zoom: 15
+            };
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+            var marker = new google.maps.Marker({
+                position: latlng,
+                draggable:true,
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+        };
+
+        function initialize() {
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude, longitude, myLatlng;
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    myLatlng = new google.maps.LatLng(latitude,longitude);
+
+                    load_map(myLatlng)
+                    }, showError
+                )
+            }
+        };
+
+        function showError(error) {
+            var latitude, longitude, myLatlng;
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    latitude = 37.7744649;
+                    longitude = -122.4184558;
+                    myLatlng = new google.maps.LatLng(latitude,longitude);
+
+                    load_map(myLatlng)
+                    break;
+
+                case error.POSITION_UNAVAILABLE:
+                    latitude = 37.7744649;
+                    longitude = -122.4184558;
+                    myLatlng = new google.maps.LatLng(latitude,longitude);
+
+                    load_map(myLatlng)
+                    break;
+
+                case error.TIMEOUT:
+                    latitude = 37.7744649;
+                    longitude = -122.4184558;
+                    myLatlng = new google.maps.LatLng(latitude,longitude);
+
+                    load_map(myLatlng)
+                    break;
+
+                case error.UNKNOWN_ERROR:
+                    latitude = 37.7744649;
+                    longitude = -122.4184558;
+                    myLatlng = new google.maps.LatLng(latitude,longitude);
+
+                    load_map(myLatlng)
+                    break;
+
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        {% block script %}{% endblock %}
+
+    </script>
+</html>
