@@ -5,8 +5,17 @@ import urllib2
 from dateutil import parser, relativedelta
 import requests
 
+from app.models import truck_model
+import connections
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def bulk_load(db, doc_list):
+    db.update(doc_list)
+    return True
+
 
 def time_in_sequence(start_time, end_time):
     '''
@@ -81,7 +90,8 @@ def change_date(schedule_value):
         batches_of_times = hours.split("/")
         master_time_schedule = {"morning": False,
                                 "afternoon": False,
-                                "evening": False}
+                                "evening": False,
+                                "late_night": False}
         for batch in batches_of_times:
             start_time, end_time = batch.split("-")
             time_schedule = time_in_sequence(start_time, end_time)
@@ -113,7 +123,8 @@ def change_date(schedule_value):
         batches_of_times = hours.split("/")
         master_time_schedule = {"morning": False,
                                 "afternoon": False,
-                                "evening": False}
+                                "evening": False,
+                                "late_night": False}
         for batch in batches_of_times:
             start_time, end_time = batch.split("-")
             time_schedule = time_in_sequence(start_time, end_time)
@@ -157,7 +168,9 @@ def convert_hours(schedule_key, schedule_value):
                         m_temp = master_temp_schedule[key]
                         t_temp = new_schedule[key]
                         for inner_key in m_temp:
-                            if t_temp[inner_key] > m_temp[inner_key]:
+                            if not t_temp:
+                                continue
+                            elif t_temp[inner_key] > m_temp[inner_key]:
                                 m_temp[inner_key] = t_temp[inner_key]
                             else:
                                 continue
@@ -202,10 +215,26 @@ def ingest_csv_file():
     csv_url = "https://data.sfgov.org/api/views/px6q-wjh5/rows.csv?accessType=DOWNLOAD"
     response = urllib2.urlopen(csv_url)
     master_doc = csv.DictReader(response)
+    list_of_trucks = []
     for row in master_doc:
         schedule = get_schedule(row['permit'], int(row['locationid']))
-        print schedule
+        if schedule:
+            truck = truck_model.Food_Truck()
+            truck.schedule = schedule
+            truck.name = row.get('Applicant')
+            truck.longitude = row.get('Longitude')
+            truck.latitude = row.get("Latitude")
+            if schedule.get('Status', "None") == "APPROVED":
+                truck.approved = True
+            list_of_trucks.append(truck.__dict__)
+    return list_of_trucks
 
-logging.info("Creating local database")
-ingest_csv_file()
+
+
+
+if __name__ == "__main__":
+    #Gotta make sure this is only ran if the ingestion script is called directly, or from make
+    logging.info("Creating local database")
+    db = connections.get_truck_db()
+    bulk_load(db, ingest_csv_file())
 
