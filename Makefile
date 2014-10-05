@@ -7,7 +7,7 @@ VIRTUALENV_NAME ?= UBER_TEST
 .PHONY: install test build virtualenv
 
 install: virtualenv
-	. ./bin/activate && sudo apt-get install couchdb && python ingestion.py
+	. ./bin/activate && sudo apt-get install couchdb && python ingestion.py && python push-ddoc.py http://localhost:5984/truck-db ./db/truck-db/designs/distance
 
 test:
 	. ./bin/activate && nosetests  -sv ./app/test/
