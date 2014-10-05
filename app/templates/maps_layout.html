@@ -6,7 +6,9 @@
         {% block head %}{% endblock %}
     </head>
     <body>
+        {% block upper_body %}{% endblock %}
         <div id="map-canvas"></div>
+        {% block lower_body %}{% endblock %}
     </body>
     <script type="text/javascript">
 
@@ -27,11 +29,22 @@
         };
 
         function initialize() {
+            var selectedVal = "";
+            var selected = $("input[type='radio'][name='inlineRadioOptions']:checked");
+            if (selected.length > 0) {
+                selectedVal = selected.val();
+            }
             if (navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var latitude, longitude, myLatlng;
                     latitude = position.coords.latitude;
                     longitude = position.coords.longitude;
+                    $.ajax({
+                        url: "{{ url_for('uber.food_trucks_open') }}",
+                        type: 'get',
+                        data: {
+                            time: selectedVal
+                    }})
                     myLatlng = new google.maps.LatLng(latitude,longitude);
 
                     load_map(myLatlng)

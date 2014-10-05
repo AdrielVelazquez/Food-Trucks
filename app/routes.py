@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from app.views import main
+from app.views import foodtrucks
 
 uber = Blueprint('uber', __name__, url_prefix='/uber',
                     template_folder='templates', static_folder='static')
@@ -13,3 +14,7 @@ def page_not_found(e):
 @uber.route("/")
 def main_application():
     return main.google_maps()
+
+@uber.route("/open", methods=["GET"])
+def food_trucks_open():
+    return foodtrucks.open()

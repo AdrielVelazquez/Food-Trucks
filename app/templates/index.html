@@ -1,1 +1,25 @@
 {% extends "maps_layout.html" %}
+{% block head %}
+<link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all">
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" media="all">
+<link href="{{ url_for('static', filename='css/bootstrap-theme.css') }}" rel="stylesheet" type="text/css" media="all">
+<link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" type="text/css" media="all">
+<script src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% endblock %}
+
+{% block upper_body %}
+    <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="morning" {% if TIMING['morning']%}checked=""{% endif %}> Morning (6am - 11am)
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="afternoon" {% if TIMING['afternoon']%}checked=""{% endif %}> Afternoon (11am - 4pm)
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="evening" {% if TIMING['evening']%}checked=""{% endif %}> Evening (4pm - 11pm)
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="late" {% if TIMING['late_night']%}checked=""{% endif %}> Late Night
+    </label>
+{% endblock %}
