@@ -17,5 +17,4 @@ def main_application():
 
 @uber.route("/open", methods=["GET"])
 def food_trucks_open():
-    #import pdb; pdb.set_trace()
     return foodtrucks.open()
