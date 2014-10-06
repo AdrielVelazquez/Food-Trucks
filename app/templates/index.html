@@ -20,6 +20,11 @@
         <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="evening" {% if TIMING['evening']%}checked=""{% endif %}> Evening (4pm - 11pm)
     </label>
     <label class="radio-inline">
-        <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="late" {% if TIMING['late_night']%}checked=""{% endif %}> Late Night
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="late_night" {% if TIMING['late_night']%}checked=""{% endif %}> Late Night
     </label>
+{% endblock %}
+
+{% block script %}
+
+
 {% endblock %}
