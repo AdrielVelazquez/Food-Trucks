@@ -56,7 +56,7 @@
                         if (key == "results") {
                             $.each(val, function (i, item) {
                                 newLatLng = new google.maps.LatLng(parseFloat(item[1]), parseFloat(item[2]));
-                                var iconBase = 'http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-8c4eb8/shapecolor-white/shadow-1/border-color/symbolstyle-color/symbolshadowstyle-no/gradient-no/foodtruck.png';
+                                var iconBase = "{{ url_for('static', filename='images/truck.png') }}";
                                 var truckmarker = new google.maps.Marker({
                                     position: newLatLng,
                                     map: map,
